@@ -1,0 +1,2 @@
+# Wishlist
+* create a ParseError interface that returns the line, column causing the error

@@ -1,3 +1,7 @@
 # go-algorithms
 
-Learning and having fun with Go and algorithms and datastructures 😄️🧠️😄️.
+Having fun with algorithms and datastructures 😄️🧠️😄️ while learning Go.
+
+## Resources
+
+TODO add resources
