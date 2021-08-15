@@ -1,3 +1,5 @@
+//nolint:errcheck // I intentionally do not want to handle AddEdge errors in
+// this test file. Unfortunately, I cannot ignore errcheck for tests only.
 package graph_test
 
 import (
