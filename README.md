@@ -1,5 +1,7 @@
 # go-algorithms
 
+[![golangci-lint](https://github.com/teleivo/go-algorithms/actions/workflows/golangci-lint.yml/badge.svg)](https://github.com/teleivo/go-algorithms/actions/workflows/golangci-lint.yml)
+
 Having fun with algorithms and datastructures 😄️🧠️😄️ while learning Go.
 
 ## Resources
