@@ -1,6 +1,24 @@
 # TODO
 * implement finding a cycle, think about the 2 different ways I've seen
 
+# Idea
+* rearrange packages and naming once I implement some directed graph algorithms?
+like so
+
+// import "github.com/teleivo/graph/undirected"
+// undirected.Graph
+// undirected.NewGraph
+// undirected.NewGraphFromReader
+// undirected.NewGraphFromReader
+// undirected.DepthFirstPaths
+
+// import "github.com/teleivo/graph/directed"
+// directed.Graph
+// directed.NewGraph
+// directed.NewGraphFromReader
+// directed.NewGraphFromReader
+// directed.DepthFirstPaths
+
 # Wishlist
 * write recursive and iterative version and benchmark
 * create a ParseError interface that returns the line, column causing the error
