@@ -1,6 +1,6 @@
 # go-algorithms
 
-[![build and test](https://github.com/teleivo/go-algorithms/actions/workflows/build_test.yml/badge.svg)](https://github.com/teleivo/go-algorithms/actions/workflows/build_test.yml) [![golangci-lint](https://github.com/teleivo/go-algorithms/actions/workflows/golangci-lint.yml/badge.svg)](https://github.com/teleivo/go-algorithms/actions/workflows/golangci-lint.yml)
+[![build and test](https://github.com/teleivo/go-algorithms/actions/workflows/build_test.yml/badge.svg)](https://github.com/teleivo/go-algorithms/actions/workflows/build_test.yml) [![golangci-lint](https://github.com/teleivo/go-algorithms/actions/workflows/golangci-lint.yml/badge.svg)](https://github.com/teleivo/go-algorithms/actions/workflows/golangci-lint.yml) [![codecov](https://codecov.io/gh/teleivo/go-algorithms/branch/main/graph/badge.svg?token=SFQKIVD00Y)](https://codecov.io/gh/teleivo/go-algorithms)
 
 Having fun with algorithms and datastructures 😄️🧠️😄️ while learning Go.
 
