@@ -92,11 +92,11 @@ func TestNewUndirectedFromReader(t *testing.T) {
 			in:   "1\n",
 		},
 		{
-			name: "EdgeNotANumber",
+			name: "NumberOfEdgesIsNotANumber",
 			in:   "1\na",
 		},
 		{
-			name: "EdgeNegative",
+			name: "NumberOfEdgesIsNegative",
 			in:   "1\n-1",
 		},
 		{
@@ -108,8 +108,20 @@ func TestNewUndirectedFromReader(t *testing.T) {
 			in:   "2\n1\n3 1",
 		},
 		{
+			name: "FirstVertexIsNotANumber",
+			in:   "2\n1\na 1",
+		},
+		{
 			name: "SecondVertexIsOutOfRange",
 			in:   "2\n1\n0 3",
+		},
+		{
+			name: "SecondVertexIsNotANumber",
+			in:   "2\n1\n0 a",
+		},
+		{
+			name: "EdgeMissesAVertex",
+			in:   "2\n1\n3",
 		},
 	}
 
