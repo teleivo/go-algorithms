@@ -198,10 +198,9 @@ func (dfp *DepthFirstPaths) dfs(v int) {
 // HasPathTo returns true if there is a path from the source vertex to the
 // given vertex. Otherwise it will return false.
 func (dfp *DepthFirstPaths) HasPathTo(v int) bool {
-	// TODO panic or return error?
-	// if v < 0 || v >= dfp.g.V() {
-	// 	return nil, fmt.Errorf("source vertex must be within range [0,%d), invalid vertex %d", dfp.g.V(), v)
-	// }
+	if err := dfp.g.validateVertex(v); err != nil {
+		panic(err)
+	}
 	return dfp.marked[v]
 }
 
