@@ -20,6 +20,9 @@ like so
 // directed.DepthFirstPaths
 
 # Wishlist
-* write recursive and iterative version and benchmark
+* write recursive and iterative version of dfs and benchmark them
+* visualize graphs
+* generate a random graph
+* find and showcase common applications of graphs with sample data that is freely available
 * create a ParseError interface that returns the line, column causing the error
 when parsing/constructing a graph from an io.Reader
