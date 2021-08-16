@@ -1,5 +1,7 @@
 # TODO
+* implement finding a cycle, think about the 2 different ways I've seen
 
 # Wishlist
+* write recursive and iterative version and benchmark
 * create a ParseError interface that returns the line, column causing the error
 when parsing/constructing a graph from an io.Reader

@@ -183,7 +183,6 @@ func NewDepthFirstPaths(g *Undirected, s int) (*DepthFirstPaths, error) {
 	return dfp, nil
 }
 
-// TODO write recursive and iterative version and benchmark
 func (dfp *DepthFirstPaths) dfs(v int) {
 	for _, w := range dfp.g.Adj(v) {
 		if !dfp.marked[w] {
