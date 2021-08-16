@@ -85,11 +85,17 @@ func NewUndirectedFromReader(r io.Reader) (*Undirected, error) {
 		if err != nil {
 			return nil, fmt.Errorf("failed to parse vertex %q, invalid line %q", n[0], t)
 		}
+		if err := u.validateVertex(v); err != nil {
+			return nil, err
+		}
 		w, err := strconv.Atoi(n[1])
 		if err != nil {
 			return nil, fmt.Errorf("failed to parse vertex %q, invalid line %q", n[1], t)
 		}
-		err = u.AddEdge(v, w)
+		if err := u.validateVertex(w); err != nil {
+			return nil, err
+		}
+		u.AddEdge(v, w)
 		if err != nil {
 			return nil, err
 		}
@@ -111,24 +117,31 @@ func (u *Undirected) E() int {
 	return u.e
 }
 
-// AddEdge adds the given undirected edge to the graph.
-func (u *Undirected) AddEdge(v, w int) error {
-	// TODO panic?
+func (u *Undirected) validateVertex(v int) error {
 	if v < 0 || v > u.V()-1 {
-		return fmt.Errorf("vertices must be within 0 and %d, invalid vertex %d", u.V()-1, v)
+		return fmt.Errorf("vertex id must be within 0 and %d, invalid vertex %d", u.V()-1, v)
 	}
-	if w < 0 || w > u.V()-1 {
-		return fmt.Errorf("vertices must be within 0 and %d, invalid vertex %d", u.V()-1, w)
+	return nil
+}
+
+// AddEdge adds the given undirected edge to the graph.
+func (u *Undirected) AddEdge(v, w int) {
+	if err := u.validateVertex(v); err != nil {
+		panic(err)
+	}
+	if err := u.validateVertex(w); err != nil {
+		panic(err)
 	}
 	u.adj[v] = append(u.adj[v], w)
 	u.adj[w] = append(u.adj[w], v)
 	u.e++
-	return nil
 }
 
 // Adj returns the vertices adjacent to the given vertex.
 func (u *Undirected) Adj(v int) []int {
-	// TODO panic when given a v that is not >= 0 and <=V-1
+	if err := u.validateVertex(v); err != nil {
+		panic(err)
+	}
 	return u.adj[v]
 }
 

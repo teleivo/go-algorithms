@@ -1,5 +1,4 @@
 # TODO
-* decide when to use panic in the graph APIs
 
 # Wishlist
 * create a ParseError interface that returns the line, column causing the error
