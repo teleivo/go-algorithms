@@ -98,9 +98,6 @@ func NewUndirectedFromReader(r io.Reader) (*Undirected, error) {
 			return nil, err
 		}
 		u.AddEdge(v, w)
-		if err != nil {
-			return nil, err
-		}
 		edges++
 	}
 	if edges != e {
