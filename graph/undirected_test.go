@@ -163,8 +163,6 @@ func TestUndirectedString(t *testing.T) {
 }
 
 func TestDepthFirstPaths(t *testing.T) {
-	// TODO come up with multiple test cases
-	// can I handle self-loops, parallel edges? if not declare in package
 	tt := []struct {
 		name        string
 		graph       *graph.Undirected
@@ -174,15 +172,46 @@ func TestDepthFirstPaths(t *testing.T) {
 		pathTo      map[int][]int
 	}{
 		{
-			name: "SimplestGraph",
+			name: "GraphWithTwoComponents",
 			graph: func() *graph.Undirected {
-				g, _ := graph.NewUndirected(3)
+				g, _ := graph.NewUndirected(4)
 				g.AddEdge(0, 1)
+				g.AddEdge(2, 3)
 				return g
 			}(),
 			source:      0,
 			hasPathTo:   []int{0, 1},
-			hasNoPathTo: []int{2},
+			hasNoPathTo: []int{2, 3},
+			pathTo: map[int][]int{
+				0: {0},
+				1: {0, 1},
+			},
+		},
+		{
+			name: "GraphWithSelfLoop",
+			graph: func() *graph.Undirected {
+				g, _ := graph.NewUndirected(2)
+				g.AddEdge(0, 1)
+				g.AddEdge(0, 0)
+				return g
+			}(),
+			source:    0,
+			hasPathTo: []int{0, 1},
+			pathTo: map[int][]int{
+				0: {0},
+				1: {0, 1},
+			},
+		},
+		{
+			name: "GraphWithParallelEdge",
+			graph: func() *graph.Undirected {
+				g, _ := graph.NewUndirected(2)
+				g.AddEdge(0, 1)
+				g.AddEdge(1, 0)
+				return g
+			}(),
+			source:    0,
+			hasPathTo: []int{0, 1},
 			pathTo: map[int][]int{
 				0: {0},
 				1: {0, 1},

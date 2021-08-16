@@ -4,6 +4,8 @@
 // Kevin Wayne. Some APIs will likely diverge since the Princeton algorithms
 // course is written in Java. Sample test data is also taken from this
 // resource.
+//
+// Parallel edges and self-loops are allowed.
 package graph
 
 import (
