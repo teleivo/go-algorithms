@@ -159,7 +159,7 @@ func (u *Undirected) String() string {
 }
 
 // DepthFirstPaths finds a path from a source vertex to every other vertex in
-// an undirected graph using depth-first search.
+// an undirected graph using a recursive implementation of depth-first search.
 type DepthFirstPaths struct {
 	g      *Undirected
 	s      int
@@ -204,6 +204,90 @@ func (dfp *DepthFirstPaths) HasPathTo(v int) bool {
 // PathTo returns the path from the source vertex to the given vertex. It
 // returns nil if there is no such path.
 func (dfp *DepthFirstPaths) PathTo(v int) []int {
+	if !dfp.HasPathTo(v) {
+		return nil
+	}
+	var p []int
+	for {
+		p = append(p, v)
+		if v == dfp.s {
+			break
+		}
+		v = dfp.edgeTo[v]
+	}
+	for i, j := 0, len(p)-1; i < j; i, j = i+1, j-1 {
+		p[i], p[j] = p[j], p[i]
+	}
+	return p
+}
+
+// IterativeDepthFirstPaths finds a path from a source vertex to every other vertex in
+// an undirected graph using an iterative implementation of depth-first search.
+type IterativeDepthFirstPaths struct {
+	g      *Undirected
+	s      int
+	marked []bool
+	edgeTo []int
+}
+
+func NewIterativeDepthFirstPaths(g *Undirected, s int) (*IterativeDepthFirstPaths, error) {
+	if s < 0 || s >= g.V() {
+		return nil, fmt.Errorf("source vertex must be within range [0,%d), invalid vertex %d", g.V(), s)
+	}
+	dfp := &IterativeDepthFirstPaths{
+		g:      g,
+		s:      s,
+		marked: make([]bool, g.V()),
+		edgeTo: make([]int, g.V()),
+	}
+	dfp.marked[s] = true
+	dfp.dfs(s)
+	return dfp, nil
+}
+
+func (dfp *IterativeDepthFirstPaths) dfs(v int) {
+	type stackFrame struct {
+		v   int
+		adj []int
+	}
+	stack := []*stackFrame{
+		{v: v, adj: dfp.g.Adj(v)},
+	}
+
+	for len(stack) > 0 {
+		// peek into the last frame
+		f := stack[len(stack)-1]
+		// pop the frame off if there are on vertices to potentially visit from this
+		// vertex f.v
+		if len(f.adj) == 0 {
+			stack = stack[:len(stack)-1]
+			continue
+		}
+
+		// take off the first vertex to visit it if unmarked
+		w := f.adj[0]
+		// remove it from the adjacency list
+		f.adj = f.adj[1:]
+		if !dfp.marked[w] {
+			dfp.marked[w] = true
+			dfp.edgeTo[w] = f.v
+			stack = append(stack, &stackFrame{v: w, adj: dfp.g.Adj(w)})
+		}
+	}
+}
+
+// HasPathTo returns true if there is a path from the source vertex to the
+// given vertex. Otherwise it will return false.
+func (dfp *IterativeDepthFirstPaths) HasPathTo(v int) bool {
+	if err := dfp.g.validateVertex(v); err != nil {
+		panic(err)
+	}
+	return dfp.marked[v]
+}
+
+// PathTo returns the path from the source vertex to the given vertex. It
+// returns nil if there is no such path.
+func (dfp *IterativeDepthFirstPaths) PathTo(v int) []int {
 	if !dfp.HasPathTo(v) {
 		return nil
 	}

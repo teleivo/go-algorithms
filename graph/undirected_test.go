@@ -288,3 +288,118 @@ func TestDepthFirstPaths(t *testing.T) {
 	}
 
 }
+
+func TestIterativeDepthFirstPaths(t *testing.T) {
+	tt := []struct {
+		name        string
+		graph       *graph.Undirected
+		source      int
+		hasPathTo   []int
+		hasNoPathTo []int
+		pathTo      map[int][]int
+	}{
+		{
+			name: "GraphWithTwoComponents",
+			graph: func() *graph.Undirected {
+				g, _ := graph.NewUndirected(4)
+				g.AddEdge(0, 1)
+				g.AddEdge(2, 3)
+				return g
+			}(),
+			source:      0,
+			hasPathTo:   []int{0, 1},
+			hasNoPathTo: []int{2, 3},
+			pathTo: map[int][]int{
+				0: {0},
+				1: {0, 1},
+			},
+		},
+		{
+			name: "GraphWithSelfLoop",
+			graph: func() *graph.Undirected {
+				g, _ := graph.NewUndirected(2)
+				g.AddEdge(0, 1)
+				g.AddEdge(0, 0)
+				return g
+			}(),
+			source:    0,
+			hasPathTo: []int{0, 1},
+			pathTo: map[int][]int{
+				0: {0},
+				1: {0, 1},
+			},
+		},
+		{
+			name: "GraphWithParallelEdge",
+			graph: func() *graph.Undirected {
+				g, _ := graph.NewUndirected(2)
+				g.AddEdge(0, 1)
+				g.AddEdge(1, 0)
+				return g
+			}(),
+			source:    0,
+			hasPathTo: []int{0, 1},
+			pathTo: map[int][]int{
+				0: {0},
+				1: {0, 1},
+			},
+		},
+		{
+			name: "GraphWithCycles",
+			graph: func() *graph.Undirected {
+				g, _ := graph.NewUndirected(8)
+				g.AddEdge(0, 1)
+				g.AddEdge(0, 6)
+				g.AddEdge(0, 7)
+				g.AddEdge(1, 6)
+				g.AddEdge(1, 2)
+				g.AddEdge(1, 4)
+				g.AddEdge(2, 3)
+				g.AddEdge(2, 4)
+				g.AddEdge(3, 4)
+				g.AddEdge(4, 5)
+				return g
+			}(),
+			source:      0,
+			hasPathTo:   []int{0, 1, 2, 3, 4, 5, 6, 7},
+			hasNoPathTo: []int{},
+			pathTo: map[int][]int{
+				0: {0},
+				1: {0, 1},
+				2: {0, 1, 2},
+				3: {0, 1, 2, 3},
+				4: {0, 1, 2, 3, 4},
+				5: {0, 1, 2, 3, 4, 5},
+				6: {0, 1, 6},
+				7: {0, 7},
+			},
+		},
+	}
+
+	for _, tt := range tt {
+		t.Run(tt.name, func(t *testing.T) {
+			dfp, err := graph.NewIterativeDepthFirstPaths(tt.graph, tt.source)
+
+			if err != nil {
+				t.Fatalf("NewIterativeDepthFirstPaths(%v, %d) returned an unexpected error: %s", tt.graph, tt.source, err)
+			}
+
+			for _, v := range tt.hasPathTo {
+				if !dfp.HasPathTo(v) {
+					t.Errorf("HasPathTo(%d) found no path to source %d but should have", v, tt.source)
+				}
+			}
+			for _, v := range tt.hasNoPathTo {
+				if dfp.HasPathTo(v) {
+					t.Errorf("HasPathTo(%d) found a path to source %d but should not have", v, tt.source)
+				}
+			}
+			for v, want := range tt.pathTo {
+				if diff := cmp.Diff(want, dfp.PathTo(v)); diff != "" {
+					t.Errorf("PathTo(%d) mismatch (-want +got):\n%s", v, diff)
+				}
+			}
+		})
+	}
+
+}
