@@ -1,6 +1,7 @@
 package graph_test
 
 import (
+	"os"
 	"strings"
 	"testing"
 
@@ -402,4 +403,70 @@ func TestIterativeDepthFirstPaths(t *testing.T) {
 		})
 	}
 
+}
+
+func BenchmarkDepthFirstPathsMediumGraph(b *testing.B) {
+	benchmarkDepthFirstPaths("testdata/mediumG.txt", b)
+}
+
+func BenchmarkDepthFirstPathsLargeGraph(b *testing.B) {
+	benchmarkDepthFirstPaths("testdata/largeG.txt", b)
+}
+
+var result *graph.DepthFirstPaths
+
+func benchmarkDepthFirstPaths(file string, b *testing.B) {
+
+	f, err := os.Open(file)
+	if err != nil {
+		b.Fatalf("failed to open testdata: %s", err)
+	}
+
+	g, err := graph.NewUndirectedFromReader(f)
+	if err != nil {
+		b.Fatalf("failed to construct undirected graph from file: %s", err)
+	}
+	var dfp *graph.DepthFirstPaths
+	for i := 0; i < b.N; i++ {
+		// assign result so the compiler does not optimize the call away
+		dfp, err = graph.NewDepthFirstPaths(g, 0)
+		if err != nil {
+			b.Fatalf("failed to compute depth first path: %s", err)
+		}
+	}
+	// assign result so the compiler does not optimize the benchmark away
+	result = dfp
+}
+
+func BenchmarkIterativeDepthFirstPathsMediumGraph(b *testing.B) {
+	benchmarkIterativeDepthFirstPaths("testdata/mediumG.txt", b)
+}
+
+func BenchmarkIterativeDepthFirstPathsLargeGraph(b *testing.B) {
+	benchmarkIterativeDepthFirstPaths("testdata/largeG.txt", b)
+}
+
+var iterativeResult *graph.IterativeDepthFirstPaths
+
+func benchmarkIterativeDepthFirstPaths(file string, b *testing.B) {
+
+	f, err := os.Open(file)
+	if err != nil {
+		b.Fatalf("failed to open testdata: %s", err)
+	}
+
+	g, err := graph.NewUndirectedFromReader(f)
+	if err != nil {
+		b.Fatalf("failed to construct undirected graph from file: %s", err)
+	}
+	var dfp *graph.IterativeDepthFirstPaths
+	for i := 0; i < b.N; i++ {
+		// assign result so the compiler does not optimize the call away
+		dfp, err = graph.NewIterativeDepthFirstPaths(g, 0)
+		if err != nil {
+			b.Fatalf("failed to compute depth first path: %s", err)
+		}
+	}
+	// assign result so the compiler does not optimize the benchmark away
+	iterativeResult = dfp
 }
